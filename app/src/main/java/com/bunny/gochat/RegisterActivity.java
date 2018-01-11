@@ -1,11 +1,13 @@
 package com.bunny.gochat;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -23,6 +25,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Button mBtn;
     private FirebaseAuth mAuth;
     private Toolbar mToolbar;
+    private ProgressDialog mRegProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
         mPass = (TextInputLayout) findViewById(R.id.regPass);
         mBtn = (Button) findViewById(R.id.regBtn);
         mAuth = FirebaseAuth.getInstance();
+        mRegProgress = new ProgressDialog(this);
 
         mToolbar = (Toolbar) findViewById(R.id.registerToolbar);
         setSupportActionBar(mToolbar);
@@ -47,7 +51,14 @@ public class RegisterActivity extends AppCompatActivity {
                 String email = mEmail.getEditText().getText().toString();
                 String password = mPass.getEditText().getText().toString();
 
-                registerUser(name,email,password);
+                if (!TextUtils.isEmpty(name) || !TextUtils.isEmpty(email) || !TextUtils.isEmpty(password)){
+                    mRegProgress.setTitle("Registering User");
+                    mRegProgress.setMessage("Loading");
+                    mRegProgress.setCanceledOnTouchOutside(false);
+                    mRegProgress.show();
+                    registerUser(name,email,password);
+                }
+
             }
         });
 
@@ -61,6 +72,7 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
 
                             Toast.makeText(RegisterActivity.this, "Authentication Done.", Toast.LENGTH_SHORT).show();
+                            mRegProgress.dismiss();
                             Intent mainIntent = new Intent(RegisterActivity.this,MainActivity.class);
                             startActivity(mainIntent);
                             finish();
@@ -71,6 +83,7 @@ public class RegisterActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             //Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            mRegProgress.hide();
                             Toast.makeText(RegisterActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
 
