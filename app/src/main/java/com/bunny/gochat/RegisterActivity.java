@@ -74,6 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
                             Toast.makeText(RegisterActivity.this, "Authentication Done.", Toast.LENGTH_SHORT).show();
                             mRegProgress.dismiss();
                             Intent mainIntent = new Intent(RegisterActivity.this,MainActivity.class);
+                            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(mainIntent);
                             finish();
                             // Sign in success, update UI with the signed-in user's information
