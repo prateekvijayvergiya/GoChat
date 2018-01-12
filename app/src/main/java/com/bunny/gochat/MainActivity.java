@@ -2,6 +2,8 @@ package com.bunny.gochat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -14,6 +16,9 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private Toolbar mToolbar;
+    private ViewPager mViewPager;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +29,14 @@ public class MainActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.mainPageToolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("GoChat");
+
+        //Tabs
+        mViewPager = (ViewPager) findViewById(R.id.mainTabPager);
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        tabLayout = (TabLayout) findViewById(R.id.mainTabs);
+        tabLayout.setupWithViewPager(mViewPager);
     }
 
     @Override
