@@ -1,7 +1,10 @@
 package com.bunny.gochat;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,6 +25,8 @@ public class SettingsActivity extends AppCompatActivity {
     private CircleImageView circleImageView;
     private TextView mName;
     private TextView mStatus;
+    private Button mSettingsStatusBtn;
+    private Button msettingsImageBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +35,8 @@ public class SettingsActivity extends AppCompatActivity {
         circleImageView = (CircleImageView) findViewById(R.id.settingsImage);
         mName = (TextView) findViewById(R.id.displayName);
         mStatus = (TextView) findViewById(R.id.statusName);
+        mSettingsStatusBtn = (Button) findViewById(R.id.settingsStatusBtn);
+        msettingsImageBtn = (Button) findViewById(R.id.settingsImageBtn);
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         String uid = currentUser.getUid();
@@ -52,5 +59,16 @@ public class SettingsActivity extends AppCompatActivity {
 
             }
         });
+
+       mSettingsStatusBtn.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               String statusValue = mStatus.getText().toString();
+               Intent statusIntent = new Intent(SettingsActivity.this,StatusActivity.class);
+               statusIntent.putExtra("status",statusValue);
+               startActivity(statusIntent);
+           }
+       });
+
     }
 }
