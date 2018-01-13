@@ -4,7 +4,8 @@
 
     <item android:title="Account Settings"
             android:id="@+id/mainSettingsBtn"/>
-    <item android:title="All Users" />
+    <item android:title="All Users"
+        android:id="@+id/allUsers"/>
     <item
         android:id="@+id/mainLogOutBtn"
         android:title="@string/log_out" />
