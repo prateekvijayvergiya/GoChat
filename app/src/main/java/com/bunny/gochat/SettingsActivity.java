@@ -1,5 +1,6 @@
 package com.bunny.gochat;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -41,6 +43,7 @@ public class SettingsActivity extends AppCompatActivity {
     private Button msettingsImageBtn;
     private static final int GALLERY_PICK=1;
     private StorageReference storageReference;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,8 @@ public class SettingsActivity extends AppCompatActivity {
 
                 mName.setText(name);
                 mStatus.setText(status);
+
+                Picasso.with(SettingsActivity.this).load(image).into(circleImageView);
             }
 
             @Override
@@ -111,15 +116,38 @@ public class SettingsActivity extends AppCompatActivity {
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
+
+                progressDialog = new ProgressDialog(SettingsActivity.this);
+                progressDialog.setTitle("Uploading Image");
+                progressDialog.setMessage("Please Wait");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.show();
+
                 Uri resultUri = result.getUri();
-                StorageReference filePath = storageReference.child("profile_iamges").child(random()+".jpg");
+                String currentUserId = currentUser.getUid();
+                StorageReference filePath = storageReference.child("profile_iamges").child(currentUserId+".jpg");
                 filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+
+
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                         if (task.isSuccessful()){
-                            Toast.makeText(SettingsActivity.this,"Loading",Toast.LENGTH_LONG).show();
+
+                            String downloadUrl = task.getResult().getDownloadUrl().toString();
+                            databaseReference.child("image").setValue(downloadUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()){
+
+                                        progressDialog.dismiss();
+                                        Toast.makeText(SettingsActivity.this,"Successful",Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
                         }else{
-                            Toast.makeText(SettingsActivity.this," Not Loading",Toast.LENGTH_LONG).show();
+
+                            Toast.makeText(SettingsActivity.this," Error in Uploading ",Toast.LENGTH_LONG).show();
+                            progressDialog.dismiss();
                         }
                     }
                 });
