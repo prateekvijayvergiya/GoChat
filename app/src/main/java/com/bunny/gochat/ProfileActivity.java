@@ -70,7 +70,35 @@ public class ProfileActivity extends AppCompatActivity {
                 profileStatus.setText(status);
 
                 Picasso.with(ProfileActivity.this).load(image).placeholder(R.drawable.profile_icon).into(profileImage);
-                progressDialog.dismiss();
+
+                //-----------Friends List-------------------
+                friendReqDatabase.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        if (dataSnapshot.hasChild(userId)){
+
+                            String requestType = dataSnapshot.child(userId).child("request type").getValue().toString();
+
+                            if (requestType.equals("received")){
+
+                                currentState = "request received";
+                                sendRequestBtn.setText("Accept Friend Request");
+                            }else if(requestType.equals("sent")) {
+
+                                    currentState = "request sent";
+                                    sendRequestBtn.setText("Cancel Friend Request");
+                            }
+                        }
+                        progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
 
             }
 
@@ -84,6 +112,9 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                sendRequestBtn.setEnabled(false);
+
+                //..........Not Friends State...........
                 if (currentState.equals("not Friends")){
 
                     friendReqDatabase.child(currentUser.getUid()).child(userId).child("user_type")
@@ -98,7 +129,11 @@ public class ProfileActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Void aVoid) {
 
-                                        Toast.makeText(ProfileActivity.this,"Request sent successfully",Toast.LENGTH_LONG).show();
+                                        sendRequestBtn.setEnabled(true);
+                                        currentState = "request sent";
+                                        sendRequestBtn.setText("Cancel Friend Request");
+
+                                        //Toast.makeText(ProfileActivity.this,"Request sent successfully"+currentState,Toast.LENGTH_LONG).show();
                                     }
                                 });
                             }else {
@@ -107,6 +142,28 @@ public class ProfileActivity extends AppCompatActivity {
                         }
                     });
 
+                }
+
+
+                //..........Cancel Friends State...........
+                if (currentState.equals("request sent")){
+
+                    friendReqDatabase.child(currentUser.getUid()).child(userId).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+
+                            friendReqDatabase.child(userId).child(currentUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+
+                                    sendRequestBtn.setEnabled(true);
+                                    currentState = "not sent";
+                                    sendRequestBtn.setText("Send Friend Request");
+
+                                }
+                            });
+                        }
+                    });
                 }
             }
         });
