@@ -1,5 +1,7 @@
 package com.bunny.gochat;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +13,9 @@ import android.widget.TextView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class UsersActivity extends AppCompatActivity {
@@ -47,6 +52,20 @@ public class UsersActivity extends AppCompatActivity {
             protected void populateViewHolder(UsersViewHolder viewHolder, Users model, int position) {
 
                 viewHolder.setName(model.getName());
+                viewHolder.setStatus(model.getStatus());
+                viewHolder.setUserImage(model.getThumbImage(),getApplicationContext());
+
+                final String userId = getRef(position).getKey();
+
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Intent profileIntent = new Intent(UsersActivity.this,ProfileActivity.class);
+                        profileIntent.putExtra("userId",userId);
+                        startActivity(profileIntent);
+                    }
+                });
             }
         };
 
@@ -67,6 +86,18 @@ public class UsersActivity extends AppCompatActivity {
 
             TextView userNameView = (TextView) mView.findViewById(R.id.userSingleName);
             userNameView.setText(name);
+        }
+
+        public void setStatus(String status) {
+
+            TextView userStatusView = (TextView) mView.findViewById(R.id.userSingleStatus);
+            userStatusView.setText(status);
+        }
+
+        public void setUserImage(String thumbImage, Context ctx) {
+
+            CircleImageView userImageView = (CircleImageView) mView.findViewById(R.id.userSingleImage);
+            Picasso.with(ctx).load(thumbImage).placeholder(R.drawable.profile_icon).into(userImageView);
         }
     }
 
