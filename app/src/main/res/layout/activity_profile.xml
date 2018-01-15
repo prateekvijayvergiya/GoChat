@@ -4,14 +4,66 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context="com.bunny.gochat.ProfileActivity">
 
+    <ImageView
+        android:id="@+id/profileImage"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
 
     <TextView
         android:id="@+id/profileDisplayName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/profileImage"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="Display Name" />
+        android:layout_marginTop="49dp"
+        android:text="Display Name"
+        android:textSize="24dp"
+        android:textColor="#ffffff"/>
+
+    <TextView
+        android:id="@+id/profileStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profileDisplayName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        android:text="User Status"
+        android:textColor="#ffffff"/>
+
+    <TextView
+        android:id="@+id/profileTotalFriends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/profileStatus"
+        android:layout_below="@+id/profileStatus"
+        android:layout_marginTop="60dp"
+        android:text="Total Friends"
+        android:textColor="#ffffff" />
+
+    <Button
+        android:id="@+id/profileRequestBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profileTotalFriends"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="19dp"
+        android:backgroundTint="@color/colorAccent"
+        android:text="Send Friend Request"
+        android:textColor="#ffffff" />
+
+    <Button
+        android:id="@+id/profileDeclineFriendRequestBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profileRequestBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Decline Friend Request"
+        android:backgroundTint="@color/colorAccent"
+        android:textColor="#ffffff"/>
+
+
 </RelativeLayout>

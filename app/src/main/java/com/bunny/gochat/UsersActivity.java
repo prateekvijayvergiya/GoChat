@@ -63,7 +63,7 @@ public class UsersActivity extends AppCompatActivity {
 
                         Intent profileIntent = new Intent(UsersActivity.this,ProfileActivity.class);
                         profileIntent.putExtra("userId",userId);
-                        startActivity(profileIntent );
+                        startActivity(profileIntent);
                     }
                 });
             }
