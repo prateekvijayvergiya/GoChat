@@ -33,7 +33,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import id.zelory.compressor.Compressor;
@@ -141,7 +140,7 @@ public class SettingsActivity extends AppCompatActivity {
                 progressDialog.show();
 
                 Uri resultUri = result.getUri();
-                File thumFilePath = new File(resultUri.getPath());
+                File thumbFilePath = new File(resultUri.getPath());
                 String currentUserId = currentUser.getUid();
 
                 Bitmap thumbBitmap = null;
@@ -150,17 +149,17 @@ public class SettingsActivity extends AppCompatActivity {
                             .setMaxHeight(200)
                             .setMaxWidth(200)
                             .setQuality(75)
-                            .compressToBitmap(thumFilePath);
+                            .compressToBitmap(thumbFilePath);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 thumbBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                final byte[] thumByte = baos.toByteArray();
+                final byte[] thumbByte = baos.toByteArray();
 
                 StorageReference filePath = storageReference.child("profile_images").child(currentUserId+".jpg");
-                final StorageReference thum_FilePath = storageReference.child("images").child("thumbs").child(currentUserId+".jpg");
+                final StorageReference thumb_FilePath = storageReference.child("images").child("thumbs").child(currentUserId+".jpg");
 
 
                 filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
@@ -171,7 +170,7 @@ public class SettingsActivity extends AppCompatActivity {
                         if (task.isSuccessful()){
 
                             final String downloadUrl = task.getResult().getDownloadUrl().toString();
-                            UploadTask uploadTask = thum_FilePath.putBytes(thumByte);
+                            UploadTask uploadTask = thumb_FilePath.putBytes(thumbByte);
                             uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> thumbTask) {
@@ -214,15 +213,5 @@ public class SettingsActivity extends AppCompatActivity {
 
     }
 
-    public static String random() {
-        Random generator = new Random();
-        StringBuilder randomStringBuilder = new StringBuilder();
-        int randomLength = generator.nextInt(10);
-        char tempChar;
-        for (int i = 0; i < randomLength; i++){
-            tempChar = (char) (generator.nextInt(96) + 32);
-            randomStringBuilder.append(tempChar);
-        }
-        return randomStringBuilder.toString();
-    }
+
 }
