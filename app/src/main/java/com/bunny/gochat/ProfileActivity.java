@@ -94,8 +94,28 @@ public class ProfileActivity extends AppCompatActivity {
                                     currentState = "request sent";
                                     sendRequestBtn.setText("Cancel Friend Request");
                             }
+                            progressDialog.dismiss();
+                        }else {
+
+                            friendDatabase.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.hasChild(userId)){
+
+                                        currentState = "friends";
+                                        sendRequestBtn.setText("Unfriend");
+                                    }
+                                    progressDialog.dismiss();
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                    progressDialog.dismiss();
+                                }
+                            });
                         }
-                        progressDialog.dismiss();
+
                     }
 
                     @Override
