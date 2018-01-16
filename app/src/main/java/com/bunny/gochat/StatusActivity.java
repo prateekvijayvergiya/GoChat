@@ -53,7 +53,7 @@ public class StatusActivity extends AppCompatActivity {
 
                 progressDialog = new ProgressDialog(StatusActivity.this);
                 progressDialog.setTitle("Saving Changes");
-                progressDialog.setTitle("Please Wait");
+                progressDialog.setMessage("Please Wait");
                 progressDialog.show();
 
                 String status = statusText.getEditText().getText().toString();
@@ -70,8 +70,6 @@ public class StatusActivity extends AppCompatActivity {
                 });
             }
         });
-
-
 
     }
 }

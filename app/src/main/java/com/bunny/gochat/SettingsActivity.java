@@ -151,6 +151,10 @@ public class SettingsActivity extends AppCompatActivity {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
 
+                Uri imageUri = data.getData();
+                CropImage.activity(imageUri).setAspectRatio(1,1)
+                        .start(this);
+
                 progressDialog = new ProgressDialog(SettingsActivity.this);
                 progressDialog.setTitle("Uploading Image");
                 progressDialog.setMessage("Please Wait");
