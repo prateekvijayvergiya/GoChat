@@ -29,7 +29,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private TextView profileName,profileStatus,profileFriends;
     private ImageView profileImage;
-    private Button sendRequestBtn;
+    private Button sendRequestBtn,declineBtn;
     private DatabaseReference databaseReference;
     private ProgressDialog progressDialog;
     private String currentState;
@@ -53,6 +53,7 @@ public class ProfileActivity extends AppCompatActivity {
         profileFriends = (TextView) findViewById(R.id.profileTotalFriends);
         profileImage = (ImageView) findViewById(R.id.profileImage);
         sendRequestBtn = (Button) findViewById(R.id.profileRequestBtn);
+        declineBtn = (Button) findViewById(R.id.profileDeclineFriendRequestBtn);
 
         currentState = "not Friends";
 
@@ -89,10 +90,15 @@ public class ProfileActivity extends AppCompatActivity {
 
                                 currentState = "request received";
                                 sendRequestBtn.setText("Accept Friend Request");
+                                declineBtn.setVisibility(View.VISIBLE);
+                                declineBtn.setEnabled(true);
+
                             }else if(requestType.equals("sent")) {
 
                                     currentState = "request sent";
                                     sendRequestBtn.setText("Cancel Friend Request");
+                                    declineBtn.setVisibility(View.INVISIBLE);
+                                    declineBtn.setEnabled(false);
                             }
                             progressDialog.dismiss();
                         }else {
@@ -104,6 +110,9 @@ public class ProfileActivity extends AppCompatActivity {
 
                                         currentState = "friends";
                                         sendRequestBtn.setText("Unfriend");
+
+                                        declineBtn.setVisibility(View.INVISIBLE);
+                                        declineBtn.setEnabled(false);
                                     }
                                     progressDialog.dismiss();
                                 }
@@ -157,6 +166,9 @@ public class ProfileActivity extends AppCompatActivity {
                                         currentState = "request sent";
                                         sendRequestBtn.setText("Cancel Friend Request");
 
+                                        declineBtn.setVisibility(View.INVISIBLE);
+                                        declineBtn.setEnabled(false);
+
                                         //Toast.makeText(ProfileActivity.this,"Request sent successfully"+currentState,Toast.LENGTH_LONG).show();
                                     }
                                 });
@@ -184,6 +196,9 @@ public class ProfileActivity extends AppCompatActivity {
                                     sendRequestBtn.setEnabled(true);
                                     currentState = "not sent";
                                     sendRequestBtn.setText("Send Friend Request");
+
+                                    declineBtn.setVisibility(View.INVISIBLE);
+                                    declineBtn.setEnabled(false);
 
                                 }
                             });
@@ -215,6 +230,9 @@ public class ProfileActivity extends AppCompatActivity {
                                                     sendRequestBtn.setEnabled(true);
                                                     currentState = "friends";
                                                     sendRequestBtn.setText("Unfriend");
+
+                                                    declineBtn.setVisibility(View.INVISIBLE);
+                                                    declineBtn.setEnabled(false);
 
                                                 }
                                             });
