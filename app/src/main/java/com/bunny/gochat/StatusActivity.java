@@ -3,7 +3,7 @@ package com.bunny.gochat;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputLayout;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -23,7 +23,7 @@ public class StatusActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private DatabaseReference databaseReference;
     private FirebaseUser currentUser;
-    private TextInputLayout statusText;
+    private TextInputEditText statusText;
     private Button saveBtn;
     private ProgressDialog progressDialog;
 
@@ -36,15 +36,15 @@ public class StatusActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Change Status");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        statusText = (TextInputEditText) findViewById(R.id.statusInput);
 
         String statusValue = getIntent().getStringExtra("status");
-        statusText.getEditText().setText(statusValue);
+        statusText.setText(statusValue);
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         String uid = currentUser.getUid();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
 
-        statusText = (TextInputLayout) findViewById(R.id.statusInput);
         saveBtn = (Button) findViewById(R.id.statusChangeBtn);
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
@@ -56,12 +56,13 @@ public class StatusActivity extends AppCompatActivity {
                 progressDialog.setMessage("Please Wait");
                 progressDialog.show();
 
-                String status = statusText.getEditText().getText().toString();
+                String status = statusText.getText().toString();
                 databaseReference.child("status").setValue(status).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()){
                             progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(),"Changes saved successfully",Toast.LENGTH_LONG).show();
                         }
                         else {
                             Toast.makeText(getApplicationContext(),"There is some error",Toast.LENGTH_LONG).show();
