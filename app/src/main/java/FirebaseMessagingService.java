@@ -1,3 +1,4 @@
+import android.app.NotificationManager;
 import android.support.v4.app.NotificationCompat;
 
 import com.bunny.gochat.R;
@@ -16,8 +17,13 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.profile_icon)
-                        .setContentTitle("My notification")
-                        .setContentText("Hello World!");
+                        .setContentTitle("Friend Request")
+                        .setContentText("You've Received a new Friend Request");
 
+
+        int mNotificationId = (int) System.currentTimeMillis();
+        NotificationManager mNotifyMgr =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mNotifyMgr.notify(mNotificationId, mBuilder.build());
     }
 }
