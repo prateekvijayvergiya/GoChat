@@ -45,7 +45,7 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         final String userId = getIntent().getStringExtra("userId");
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(userId);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
         friendReqDatabase = FirebaseDatabase.getInstance().getReference().child("friend_requsts");
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         friendDatabase = FirebaseDatabase.getInstance().getReference().child("Friends");
