@@ -87,7 +87,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                         if (dataSnapshot.hasChild(userId)){
 
-                            String requestType = dataSnapshot.child(userId).child("request type").getValue().toString();
+                            String requestType = dataSnapshot.child(userId).child("request_type").getValue().toString();
 
                             if (requestType.equals("received")){
 
