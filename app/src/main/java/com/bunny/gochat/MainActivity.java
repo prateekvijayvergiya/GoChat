@@ -11,6 +11,8 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    private DatabaseReference mUserRef;
     private TabLayout tabLayout;
 
     @Override
@@ -29,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.mainPageToolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("GoChat");
+
+        mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
         //Tabs
         mViewPager = (ViewPager) findViewById(R.id.mainTabPager);
@@ -47,8 +52,16 @@ public class MainActivity extends AppCompatActivity {
 
         if (currentUser == null){
             sendToStart();
+        }else {
+            mUserRef.child("online").setValue(true);
         }
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mUserRef.child("online").setValue(false);
     }
 
     private void sendToStart() {
