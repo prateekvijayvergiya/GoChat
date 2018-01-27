@@ -4,15 +4,11 @@
     android:layout_height="match_parent"
     tools:context="com.bunny.gochat.FriendsFragment">
 
-    <include
-        layout="@layout/app_bar_layout"
-        android:id="@+id/friendsAppBar"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/friendsList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/friendsAppBar">
+        android:layout_height="match_parent">
 
     </android.support.v7.widget.RecyclerView>
 
