@@ -14,28 +14,43 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_alignParentStart="true"
+        android:background="#ffffff"
+        android:weightSum="10">
 
-        <ImageView
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/add"
-            android:padding="8dp"
-            android:id="@+id/ChatPlusImage"/>
-
-        <TextView
-            android:layout_width="280dp"
-            android:layout_height="50dp"
             android:padding="10dp"
+            android:layout_weight="1"
+            android:background="#ffffff"
+            android:id="@+id/chatAddBtn"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="12dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="14dp"
+            android:id="@+id/chatMessageView"
             android:textSize="18dp"
-            android:hint="Text"
+            android:ems="10"
+            android:hint="Enter Message..."
+            android:inputType="textPersonName"
+            android:layout_weight="8"
             />
 
-        <ImageView
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/send"
-            android:padding="8dp"/>
+            android:padding="10dp"
+            android:layout_weight="1"
+            android:id="@+id/chatSendBtn"
+            android:background="#ffffff"/>
 
 
     </LinearLayout>
