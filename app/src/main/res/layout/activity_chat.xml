@@ -10,6 +10,17 @@
     <include layout="@layout/app_bar_layout"
         android:id="@+id/chatAppBar"/>
 
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/linearLayout"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/messagesList"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/chatAppBar">
+
+    </android.support.v7.widget.RecyclerView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,7 +28,8 @@
         android:orientation="horizontal"
         android:layout_alignParentStart="true"
         android:background="#ffffff"
-        android:weightSum="10">
+        android:weightSum="10"
+        android:id="@+id/linearLayout">
 
         <ImageButton
             android:layout_width="wrap_content"

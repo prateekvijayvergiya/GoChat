@@ -34,7 +34,10 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("GoChat");
 
-        mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+        if (mAuth.getCurrentUser() != null){
+
+            mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+        }
 
         //Tabs
         mViewPager = (ViewPager) findViewById(R.id.mainTabPager);
