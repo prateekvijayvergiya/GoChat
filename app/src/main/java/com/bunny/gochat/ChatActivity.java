@@ -61,7 +61,11 @@ public class ChatActivity extends AppCompatActivity {
                     mLastSeen.setText("Online");
                 }
                 else {
-                    mLastSeen.setText(online);
+
+                    GetTimeAgo getTimeAgo = new GetTimeAgo();
+                    Long lastTime = Long.parseLong(online);
+                    String lastSeen = getTimeAgo.getTimeAgo(lastTime,getApplicationContext());
+                    mLastSeen.setText(lastSeen);
                 }
             }
 
