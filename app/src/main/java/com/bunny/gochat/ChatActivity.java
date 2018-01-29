@@ -56,6 +56,11 @@ public class ChatActivity extends AppCompatActivity {
     private static final int TOTAL_ITEMS_TO_LOAD = 10;
     private int mCurrentPage = 1;
     private SwipeRefreshLayout mRefreshLayout;
+
+    private int itemPos = 0;
+
+    private String mLastKey = "";
+    private String mPrevKey = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -176,13 +181,21 @@ public class ChatActivity extends AppCompatActivity {
 
                 mCurrentPage++;
 
-                //int itemPos = 0;
+                int itemPos = 0;
 
-                //loadMoreMessages();
+                loadMoreMessages();
 
 
             }
         });
+
+    }
+
+    private void loadMoreMessages() {
+
+        DatabaseReference messageRef = mRootRef.child("messages").child(mCurrentUser).child(mChatUser);
+
+        Query messageQuery = messageRef.orderByKey().endAt(mLastKey).limitToLast(10);
 
     }
 
@@ -199,6 +212,18 @@ public class ChatActivity extends AppCompatActivity {
 
                 Messages message = dataSnapshot.getValue(Messages.class);
 
+
+                itemPos++;
+
+                if(itemPos == 1){
+
+                    String messageKey = dataSnapshot.getKey();
+
+                    mLastKey = messageKey;
+                    mPrevKey = messageKey;
+
+                }
+                
                 messagesList.add(message);
                 mAdapter.notifyDataSetChanged();
 
