@@ -2,6 +2,7 @@ package com.bunny.gochat;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
@@ -50,6 +52,10 @@ public class ChatActivity extends AppCompatActivity {
     private final List<Messages>  messagesList = new ArrayList<>();
     private LinearLayoutManager mLinearLayout;
     private MessageAdapter mAdapter;
+
+    private static final int TOTAL_ITEMS_TO_LOAD = 10;
+    private int mCurrentPage = 1;
+    private SwipeRefreshLayout mRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +83,7 @@ public class ChatActivity extends AppCompatActivity {
 
         mAdapter = new MessageAdapter(messagesList);
         mMessagesList = (RecyclerView) findViewById(R.id.messagesList);
+        mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.messageSwipeLyout);
         mLinearLayout = new LinearLayoutManager(this);
 
         mMessagesList.setHasFixedSize(true);
@@ -161,14 +168,42 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+
+
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                mCurrentPage++;
+
+                //int itemPos = 0;
+
+                //loadMoreMessages();
+
+
+            }
+        });
+
     }
 
     private void loadMessages() {
+
+
+        DatabaseReference messageRef = mRootRef.child("messages").child(mCurrentUser).child(mChatUser);
+
+        Query messageQuery = messageRef.limitToLast(mCurrentPage * TOTAL_ITEMS_TO_LOAD);
 
         mRootRef.child("messages").child(mCurrentUser).child(mChatUser).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
+                Messages message = dataSnapshot.getValue(Messages.class);
+
+                messagesList.add(message);
+                mAdapter.notifyDataSetChanged();
+
+                mMessagesList.scrollToPosition(messagesList.size() - 1);
+                mRefreshLayout.setRefreshing(false);
             }
 
             @Override

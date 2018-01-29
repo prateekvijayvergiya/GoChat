@@ -56,8 +56,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
             messageText = (TextView) view.findViewById(R.id.messageTextLayout);
             profileImage = (CircleImageView) view.findViewById(R.id.messageprofileLayout);
-            //displayName = (TextView) view.findViewById(R.id.name_text_layout);
-            //messageImage = (ImageView) view.findViewById(R.id.message_image_layout);
+            displayName = (TextView) view.findViewById(R.id.nameTextLayout);
+            messageImage = (ImageView) view.findViewById(R.id.messageImageLayout);
 
         }
     }
