@@ -223,7 +223,7 @@ public class ChatActivity extends AppCompatActivity {
                     mPrevKey = messageKey;
 
                 }
-                
+
                 messagesList.add(message);
                 mAdapter.notifyDataSetChanged();
 
