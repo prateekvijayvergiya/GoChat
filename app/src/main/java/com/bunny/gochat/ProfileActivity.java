@@ -175,8 +175,8 @@ public class ProfileActivity extends AppCompatActivity {
                     notificationData.put("type","request");
 
                     Map requestMap = new HashMap();
-                    requestMap.put("FriendReq/" + currentUser.getUid() + "/" + userId + "requestType", "sent");
-                    requestMap.put("FriendReq/" + userId + "/" + currentUser.getUid() + "requestType", "received");
+                    requestMap.put("FriendReq/" + currentUser.getUid() + "/" + userId + "/requestType", "sent");
+                    requestMap.put("FriendReq/" + userId + "/" + currentUser.getUid() + "/requestType", "received");
                     requestMap.put("Notifications/" + userId + "/" + mNotificationId, notificationData);
 
                    /* friendReqDatabase.updateChildren(requestMap, new DatabaseReference.CompletionListener() {
@@ -252,8 +252,8 @@ public class ProfileActivity extends AppCompatActivity {
 
                     final String currentDate = DateFormat.getDateTimeInstance().format(new Date());
                     Map friendsMap = new HashMap();
-                    friendsMap.put("FriendReq/" + currentUser.getUid() + "/" + userId + "/date", currentDate);
-                    friendsMap.put("FriendReq/" + userId + "/" + currentUser.getUid() + "/date", currentDate);
+                    friendsMap.put("Friends/" + currentUser.getUid() + "/" + userId + "/date", currentDate);
+                    friendsMap.put("Friends/" + userId + "/" + currentUser.getUid() + "/date", currentDate);
 
                     friendsMap.put("FriendReq/" + currentUser.getUid() + "/" + userId, null);
                     friendsMap.put("FriendReq/" + userId + "/" + currentUser.getUid(), null);
@@ -303,7 +303,8 @@ public class ProfileActivity extends AppCompatActivity {
                             }else {
                                 String error = databaseError.getMessage();
                                 Toast.makeText(ProfileActivity.this,error,Toast.LENGTH_LONG).show();
-                            }sendRequestBtn.setEnabled(true);
+                            }
+                            sendRequestBtn.setEnabled(true);
                         }
                     });
                 }
