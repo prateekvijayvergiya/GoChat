@@ -1,6 +1,7 @@
 package com.bunny.gochat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -25,6 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,9 +58,11 @@ public class ChatActivity extends AppCompatActivity {
 
     private static final int TOTAL_ITEMS_TO_LOAD = 10;
     private int mCurrentPage = 1;
+    private static final int GALLERY_PICK = 1;
     private SwipeRefreshLayout mRefreshLayout;
 
     private int itemPos = 0;
+    private StorageReference mImageStorage;
 
     private String mLastKey = "";
     private String mPrevKey = "";
@@ -95,6 +100,10 @@ public class ChatActivity extends AppCompatActivity {
         mMessagesList.setLayoutManager(mLinearLayout);
 
         mMessagesList.setAdapter(mAdapter);
+
+        mImageStorage = FirebaseStorage.getInstance().getReference();
+
+        mRootRef.child("Chat").child(mCurrentUser).child(mChatUser).child("seen").setValue(true);
         loadMessages();
 
         mChatAddBtn = (ImageButton) findViewById(R.id.chatAddBtn);
@@ -174,6 +183,20 @@ public class ChatActivity extends AppCompatActivity {
         });
 
 
+        mChatAddBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent galleryIntent = new Intent();
+                galleryIntent.setType("image/*");
+                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+                startActivityForResult(Intent.createChooser(galleryIntent, "SELECT IMAGE"), GALLERY_PICK);
+
+            }
+        });
+
+
 
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -197,6 +220,65 @@ public class ChatActivity extends AppCompatActivity {
 
         Query messageQuery = messageRef.orderByKey().endAt(mLastKey).limitToLast(10);
 
+        messageQuery.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+
+                Messages message = dataSnapshot.getValue(Messages.class);
+                String messageKey = dataSnapshot.getKey();
+
+                if (!mPrevKey.equals(messageKey)) {
+
+                    messagesList.add(itemPos++, message);
+
+                } else {
+
+                    mPrevKey = mLastKey;
+
+                }
+
+
+                if (itemPos == 1) {
+
+                    mLastKey = messageKey;
+
+                }
+
+
+                Log.d("TOTALKEYS", "Last Key : " + mLastKey + " | Prev Key : " + mPrevKey + " | Message Key : " + messageKey);
+
+                mAdapter.notifyDataSetChanged();
+
+                mRefreshLayout.setRefreshing(false);
+
+                mLinearLayout.scrollToPositionWithOffset(10, 0);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
     }
 
     private void loadMessages() {
@@ -206,7 +288,7 @@ public class ChatActivity extends AppCompatActivity {
 
         Query messageQuery = messageRef.limitToLast(mCurrentPage * TOTAL_ITEMS_TO_LOAD);
 
-        mRootRef.child("messages").child(mCurrentUser).child(mChatUser).addChildEventListener(new ChildEventListener() {
+        messageQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
