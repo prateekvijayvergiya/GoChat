@@ -89,7 +89,7 @@ public class FriendsFragment extends Fragment {
 
                         if (dataSnapshot.hasChild("online")){
 
-                            String userOnline = (String) dataSnapshot.child("online").getValue();
+                            String userOnline =  dataSnapshot.child("online").getValue().toString();
                             viewHolder.setUserOnline(userOnline);
                         }
 
